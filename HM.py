@@ -20,13 +20,15 @@ def enqueue_output(out, queue):
 		queue.put(line)
 	out.close()
 
+
+#Create a process p to run mpg321
 p = Popen(['mpg321', '-R', 'testplayer'],stdin=PIPE, stdout=PIPE,bufsize=1, close_fds=ON_POSIX)#, stderr=PIPE)
 q=Queue()
 t= Thread(target=enqueue_output, args=(p.stdout,q))
 t.daemon = True
 t.start()
 
-#Build class to track button state
+#Build class to track button state, rather than global list
 class MyButtonStateClass(object):
 	def create(self):
 		self.state = [0,0,0,0,0,0]
@@ -44,7 +46,6 @@ class MyButtonStateClass(object):
 					self.state[x]=1
 			else:
 				self.state[x]=0
-		print(self.state)
 	def stop (self):
 		self.state = [0,0,0,0,0,0]
 	def getState(self):
@@ -65,18 +66,16 @@ GP.setmode(GP.BOARD)
 #lPins = Pins for the LEDs.
 #bPins = Pins for the buttons.
 #Then we list out the different tracks that we want to use.
-#lPins = [15,7,11,13,19,21]
-#lPins = [19,15,11,13,7,21]
 lPins=[11,15,7,21,19,13]
 bPins = [10,24,22,12,16,18]
 
 
+#create list of the tracks for each button
 tracks = ["track1.mp3","track2.mp3","track3.mp3","track4.mp3","track5.mp3","track6.mp3"]
 
 
 def button_press(channel):
 	button = bPins.index(channel)
-	print("button {0} - led {1}".format(bPins[button],lPins[button]))
 	buttons.playPause(button)	
 
 for x in range (len(lPins)):
