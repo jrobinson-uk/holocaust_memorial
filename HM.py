@@ -29,9 +29,10 @@ t.daemon = True
 t.start()
 
 #Build class to track button state, rather than global list
-class MyButtonStateClass(object):
-	def create(self):
+class MyButtonStateClass:
+	def __init__(self):
 		self.state = [0,0,0,0,0,0]
+		
 	def playPause(self,n):
 		for x in range (6):
 			if (x==n):
@@ -46,13 +47,14 @@ class MyButtonStateClass(object):
 					self.state[x]=1
 			else:
 				self.state[x]=0
+				
 	def stop (self):
 		self.state = [0,0,0,0,0,0]
+		
 	def getState(self):
 		return self.state
 
 buttons = MyButtonStateClass()
-buttons.create()
 
 
 
